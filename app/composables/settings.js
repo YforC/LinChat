@@ -93,8 +93,8 @@ class Settings {
         this._deepMergeReactive(mergedSettings, savedSettings);
 
         if (mergedSettings.selected_model_id === "moonshotai/kimi-k2-instruct-0905" ||
-            mergedSettings.selected_model_id === "moonshotai/kimi-k2-0905" ||
-            !mergedSettings.selected_model_id) {
+          mergedSettings.selected_model_id === "moonshotai/kimi-k2-0905" ||
+          !mergedSettings.selected_model_id) {
           mergedSettings.selected_model_id = DEFAULT_MODEL_ID;
         }
 
@@ -237,11 +237,23 @@ class Settings {
    * Computed property to get the currently selected model object
    */
   get selectedModel() {
-    const model = findModelById(availableModels, this.settings.selected_model_id);
-    console.log('selectedModel getter called');
-    console.log('  - selected_model_id:', this.settings.selected_model_id);
-    console.log('  - availableModels.value:', availableModels.value);
-    console.log('  - found model:', model);
+    let model = findModelById(availableModels, this.settings.selected_model_id);
+
+    // If current selected model not found, try falling back to DEFAULT_MODEL_ID
+    if (!model && this.settings.selected_model_id !== DEFAULT_MODEL_ID) {
+      model = findModelById(availableModels, DEFAULT_MODEL_ID);
+    }
+
+    // If still not found, just pick the first model from the first category
+    if (!model && availableModels.value?.length > 0) {
+      const firstCategory = availableModels.value[0];
+      if (firstCategory.models && firstCategory.models.length > 0) {
+        model = firstCategory.models[0];
+      } else if (firstCategory.id) {
+        model = firstCategory;
+      }
+    }
+
     return model;
   }
 

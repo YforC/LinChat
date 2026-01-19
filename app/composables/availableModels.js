@@ -1,10 +1,8 @@
 import { ref } from 'vue';
 import localforage from 'localforage';
 
-/**
- * Available models from Hack Club
- */
-export const DEFAULT_MODEL_ID = "gemini-3-pro-preview";
+
+export let DEFAULT_MODEL_ID = "";
 const MODELS_STORAGE_KEY = 'models_config';
 
 /**
@@ -35,54 +33,35 @@ export function findModelById(models, id) {
 // Reactive reference for available models
 export const availableModels = ref([]);
 
-// Default models as fallback (should match config.json)
-const defaultModels = [
-  {
-    category: "My Custom Models",
-    logo: "/ai_logos/gemini.svg",
-    models: [
-      {
-        id: "gemini-3-pro-preview",
-        name: "Gemini 3 Pro Preview",
-        description: "Google's next-gen, SOTA multimodal model.",
-        reasoning: false,
-        vision: true,
-        extra_functions: [],
-        extra_parameters: {}
-      },
-      {
-        id: "gemini-3-flash-preview",
-        name: "Gemini 3 Flash Preview",
-        description: "Fast, frontier-level model.",
-        reasoning: false,
-        vision: true,
-        extra_functions: [],
-        extra_parameters: {}
-      },
-      {
-        id: "qwen3-coder-plus",
-        name: "Qwen 3 Coder Plus",
-        description: "Specialized coding model by Qwen.",
-        reasoning: false,
-        vision: false,
-        extra_functions: [],
-        extra_parameters: {}
-      },
-      {
-        id: "qwen3-coder-flash",
-        name: "Qwen 3 Coder Flash",
-        description: "Fast coding model by Qwen.",
-        reasoning: false,
-        vision: false,
-        extra_functions: [],
-        extra_parameters: {}
-      }
-    ]
-  }
-];
+// Initialize as empty
+availableModels.value = [];
 
-// Initialize with defaults immediately
-availableModels.value = defaultModels;
+/**
+ * Updates available models and DEFAULT_MODEL_ID from data.
+ * @param {Array} data 
+ */
+function updateModelsFromData(data) {
+  if (data && Array.isArray(data) && data.length > 0) {
+    availableModels.value = data;
+
+    // Set DEFAULT_MODEL_ID to the first available model if it's not already set
+    if (!DEFAULT_MODEL_ID) {
+      for (const item of data) {
+        if (item.models && item.models.length > 0) {
+          DEFAULT_MODEL_ID = item.models[0].id;
+          break;
+        }
+        if (item.id) {
+          DEFAULT_MODEL_ID = item.id;
+          break;
+        }
+      }
+    }
+    console.log('Models loaded, DEFAULT_MODEL_ID set to:', DEFAULT_MODEL_ID);
+    return true;
+  }
+  return false;
+}
 
 /**
  * Loads models from local storage (client only).
@@ -92,10 +71,7 @@ export async function loadModelsFromLocal() {
   if (!import.meta.client) return false;
   try {
     const storedModels = await localforage.getItem(MODELS_STORAGE_KEY);
-    if (Array.isArray(storedModels) && storedModels.length > 0) {
-      availableModels.value = storedModels;
-      return true;
-    }
+    return updateModelsFromData(storedModels);
   } catch (error) {
     console.error('Failed to load local models config:', error);
   }
@@ -131,10 +107,8 @@ export async function fetchModels() {
     if (response.ok) {
       const data = await response.json();
       console.log('fetchModels data:', data);
-      if (data && Array.isArray(data) && data.length > 0) {
-        availableModels.value = data;
+      if (updateModelsFromData(data)) {
         await saveModelsToLocal(data);
-        console.log('Models loaded from config:', data);
       }
     }
   } catch (error) {

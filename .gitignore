@@ -25,3 +25,6 @@ Thumbs.db
 
 # Tooling
 .claude/
+
+# Config files
+config.json

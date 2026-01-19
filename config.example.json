@@ -1,0 +1,17 @@
+[
+    {
+        "category": "Example Category",
+        "logo": "/ai_logos/moonshot.svg",
+        "models": [
+            {
+                "id": "example-model-id",
+                "name": "Example Model Name",
+                "description": "This is a description for the example model.",
+                "reasoning": false,
+                "vision": true,
+                "extra_functions": [],
+                "extra_parameters": {}
+            }
+        ]
+    }
+]
