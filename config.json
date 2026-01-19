@@ -1,0 +1,44 @@
+[
+  {
+    "category": "My Custom",
+    "logo": "/ai_logos/gemini.svg",
+    "models": [
+      {
+        "id": "gemini-3-pro-preview",
+        "name": "Gemini 3 Pro Preview",
+        "description": "Google's next-gen, SOTA multimodal model.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-3-flash-preview",
+        "name": "Gemini 3 Flash Preview",
+        "description": "Fast, frontier-level model.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "qwen3-coder-plus",
+        "name": "Qwen 3 Coder Plus",
+        "description": "Specialized coding model by Qwen.",
+        "reasoning": false,
+        "vision": false,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "qwen3-coder-flash",
+        "name": "Qwen 3 Coder Flash",
+        "description": "Fast coding model by Qwen.",
+        "reasoning": false,
+        "vision": false,
+        "extra_functions": [],
+        "extra_parameters": {}
+      }
+    ]
+  }
+]
