@@ -1,281 +1,92 @@
-# LinChat 🚀
+# LinChat
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-4.x-00DC82?logo=nuxt.js&logoColor=white)](https://nuxt.com/)
-[![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vuedotjs&logoColor=white)](https://vuejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+LinChat 是一个基于 Nuxt 4 构建的 AI 聊天应用，支持通过 OpenAI 兼容接口接入不同模型，并提供流式输出、附件上传、文件阅读、图片与视频结果展示、本地会话保存、无痕模式等能力。
 
-LinChat is a high-performance, premium AI chat interface built with **Nuxt 4**. It provides a sleek, responsive, and feature-rich environment for interacting with various AI models through an OpenAI-compatible API proxy.
+## 项目特点
 
-[中文说明](#linchat-中文) | [English](#linchat-)
+- 支持多模型切换与模型分类管理
+- 支持 OpenAI 兼容请求格式
+- 支持流式聊天、推理过程展示、工具调用结果展示
+- 支持图片上传、文件阅读、图片生成、视频生成
+- 支持本地保存历史会话
+- 支持移动端适配
+- 支持通过 Docker Compose 快速部署
 
----
+## 技术栈
 
-## ✨ Features
+- 前端框架：Nuxt 4、Vue 3
+- 接口调用：OpenAI SDK
+- 本地存储：localforage
+- Markdown 渲染：markdown-it
+- 代码高亮：highlight.js
+- 数学公式：katex
 
-- 🌈 **Multi-Model Support**: Effortlessly switch between different LLMs with category management.
-- 🌊 **Real-time Streaming**: Smooth, responsive token streaming with support for reasoning/thinking process display.
-- 📎 **Rich Attachments**: 
-  - **Images**: Automatic WebP compression and resizing for optimal performance.
-  - **PDFs**: Full document parsing with Mistral OCR support.
-- 🛠️ **Tool Integration**: Visual feedback for tool calls and results.
-- 📝 **Markdown Mastery**: Full support for Markdown, Syntax Highlighting, and LaTeX (KaTeX) mathematical formulas.
-- 🕵️ **Incognito Mode**: Chat without saving history to local storage.
-- 💾 **Local Persistence**: Conversations are saved locally using `localforage` (IndexedDB), ensuring your data stays in your browser.
-- 🎨 **Premium UI**: Modern design with glassmorphism, dark mode support, and smooth animations.
+## 本地开发
 
-## 🚀 Tech Stack
-
-- **Framework**: Nuxt 4 (Vue 3)
-- **Styling**: Vanilla CSS with modern CSS variables
-- **API Client**: OpenAI SDK (compatible with OpenRouter, DeepSeek, etc.)
-- **Storage**: `localforage` (IndexedDB)
-- **Rendering**: `markdown-it`, `highlight.js`, `katex`
-
-## 🛠️ Quick Start
-
-### 1. Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/linchat.git
-cd linchat
-
-# Install dependencies
-npm install
-```
-
-### 2. Configuration
-
-Copy the example environment file and add your API key:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-```env
-NUXT_OPENAI_API_KEY=your_api_key_here
-NUXT_OPENAI_API_BASE=https://api.openai.com/v1 # Optional: defaults to proprietary proxy
-```
-
-### 3. Development
-
-```bash
-npm run dev
-```
-
-Visit `http://localhost:3000` to start chatting!
-
-## 📦 Build & Deployment
-
-```bash
-# Production Build
-npm run build
-
-# Preview Production Build
-npm run preview
-
-# Generate Static Site (SSG)
-npm run generate
-```
-
-To deploy the production build:
-```bash
-node .output/server/index.mjs
-```
-
-## 📁 Project Structure
-
-```text
-├── app/                # Nuxt application source
-│   ├── components/     # Vue components
-│   ├── composables/    # Business logic & state management
-│   ├── pages/          # Application routes
-│   └── assets/         # Global styles and assets
-├── server/             # Nitro server engine
-│   └── api/            # API proxy routes (/api/ai, /api/models)
-├── config/             # Model configurations (models.json)
-├── public/             # Static assets
-└── nuxt.config.ts      # Nuxt configuration
-```
-
----
-
-## LinChat (中文)
-
-LinChat 是一个基于 **Nuxt 4** 构建的高性能 AI 聊天前端。它提供了一个流畅、美观且功能丰富的界面，支持通过 OpenAI 兼容接口连接各种 AI 模型。
-
-### ✨ 功能特性
-
-- 🌈 **多模型路由**：内置分类管理，支持在设置面板中实时编辑并持久化配置。
-- 🌊 **深度思考流**：完整支持推理（Reasoning）过程展示，流式响应极其流畅。
-- 📎 **附件增强**：
-  - **图片**：自动压缩至 WebP 格式，在保证清晰度的同时减少带宽消耗。
-  - **PDF**：支持通过 `file-parser` 插件进行 OCR 识别与内容解析。
-- 🕵️ **无痕模式**：开启后对话数据不落库，保护隐私。
-- 💾 **本地存储**：基于 `localforage` 实现的对话持久化，消息在发送瞬间即自动保存。
-- 🎨 **现代设计**：精美的磨砂玻璃质感，适配深色模式，极致的微交互体验。
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Docker Compose Deployment
-
-If you want to deploy LinChat directly with the published Docker image, use `docker compose`.
-
-### 1. Prerequisites
-
-Install these first:
-
-- Docker
-- Docker Compose plugin
-
-Check them with:
-
-```bash
-docker --version
-docker compose version
-```
-
-### 2. Get the project files
-
-Clone the repository:
+### 1. 克隆项目
 
 ```bash
 git clone https://github.com/YforC/LinChat.git
 cd LinChat
 ```
 
-### 3. Create the environment file
+### 2. 安装依赖
 
-Copy the example file:
+```bash
+npm install
+```
+
+### 3. 配置环境变量
+
+复制示例文件：
 
 ```bash
 cp .env.example .env
 ```
 
-Then edit `.env` and fill in your real OpenAI-compatible API configuration:
+编辑 `.env`：
 
 ```env
 NUXT_OPENAI_API_BASE=https://your-openai-compatible-endpoint.example.com/v1
 NUXT_OPENAI_API_KEY=your_api_key_here
 ```
 
-Notes:
+说明：
 
-- `NUXT_OPENAI_API_BASE` should be the full OpenAI-compatible base URL, usually ending with `/v1`
-- `NUXT_OPENAI_API_KEY` is required
-- Never commit your real `.env` file
+- `NUXT_OPENAI_API_BASE` 为你的 OpenAI 兼容接口地址，通常以 `/v1` 结尾
+- `NUXT_OPENAI_API_KEY` 为接口密钥
 
-### 4. Docker Compose file
-
-The deployment compose file is:
-
-```yaml
-services:
-  linchat:
-    image: bilon/linchat:latest
-    pull_policy: always
-    env_file:
-      - .env
-    ports:
-      - '3000:3000'
-    environment:
-      NITRO_HOST: 0.0.0.0
-      NITRO_PORT: 3000
-    restart: unless-stopped
-```
-
-### 5. Start the service
+### 4. 启动开发环境
 
 ```bash
-docker compose up -d
+npm run dev
 ```
 
-Open:
+默认访问地址：
 
 ```text
 http://localhost:3000
 ```
 
-If you are deploying on a server, replace `localhost` with the server IP or domain.
+## 构建与运行
 
-### 6. Check status and logs
-
-```bash
-docker compose ps
-docker compose logs -f
-```
-
-Stop the service:
+### 构建生产版本
 
 ```bash
-docker compose down
+npm run build
 ```
 
-### 7. Update to the latest image
-
-Because the compose file uses `pull_policy: always`, the service will prefer the newest image when recreating the container.
-
-Manual update commands:
+### 本地预览生产版本
 
 ```bash
-docker compose pull
-docker compose up -d
+npm run preview
 ```
 
-### 8. Common operations
-
-Restart:
+### 直接运行构建产物
 
 ```bash
-docker compose restart
+node .output/server/index.mjs
 ```
-
-Recreate:
-
-```bash
-docker compose down
-docker compose up -d
-```
-
-Remove unused images:
-
-```bash
-docker image prune -f
-```
-
-### 9. Troubleshooting
-
-If the page opens but chat requests fail:
-
-- Check whether `.env` contains the correct API base URL
-- Check whether the API key is valid
-- Confirm your upstream service supports OpenAI-compatible requests
-- Inspect logs with `docker compose logs -f`
-
-If port `3000` is occupied:
-
-```yaml
-ports:
-  - '8080:3000'
-```
-
-Then visit:
-
-```text
-http://localhost:8080
-```
-
-### 10. Production suggestions
-
-- Put LinChat behind Nginx or Caddy
-- Enable HTTPS
-- Restrict access if the deployment is private
-- Back up your `.env` securely
 
 ## Docker Compose 部署教程
 
@@ -323,9 +134,34 @@ NUXT_OPENAI_API_KEY=your_api_key_here
 
 - `NUXT_OPENAI_API_BASE` 填完整的 OpenAI 兼容接口地址，通常以 `/v1` 结尾
 - `NUXT_OPENAI_API_KEY` 必填
-- 不要把真实 `.env` 提交到 Git 仓库
+- 不要把真实 `.env` 提交到代码仓库
 
-### 4. 启动服务
+### 4. 当前 Docker Compose 配置
+
+项目当前使用的 `docker-compose.yml` 如下：
+
+```yaml
+services:
+  linchat:
+    image: bilon/linchat:latest
+    pull_policy: always
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    environment:
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+    restart: unless-stopped
+```
+
+说明：
+
+- 镜像直接使用已发布的 `bilon/linchat:latest`
+- `pull_policy: always` 表示每次重建容器时优先拉取最新镜像
+- `env_file` 会把 `.env` 中的接口配置传进容器
+
+### 5. 启动服务
 
 在项目根目录执行：
 
@@ -333,17 +169,17 @@ NUXT_OPENAI_API_KEY=your_api_key_here
 docker compose up -d
 ```
 
-启动成功后访问：
+启动后访问：
 
 ```text
 http://localhost:3000
 ```
 
-如果是服务器部署，就把 `localhost` 换成服务器 IP 或域名。
+如果部署在服务器上，请把 `localhost` 改成服务器 IP 或域名。
 
-### 5. 查看运行状态
+### 6. 查看运行状态
 
-查看容器：
+查看容器状态：
 
 ```bash
 docker compose ps
@@ -361,14 +197,7 @@ docker compose logs -f
 docker compose down
 ```
 
-### 6. 更新镜像
-
-当前 compose 使用的是：
-
-```yaml
-image: bilon/linchat:latest
-pull_policy: always
-```
+### 7. 更新镜像
 
 手动更新命令：
 
@@ -377,16 +206,36 @@ docker compose pull
 docker compose up -d
 ```
 
-### 7. 常见问题
+如果你希望彻底重建容器，可以执行：
 
-如果页面能打开，但聊天失败：
+```bash
+docker compose down
+docker compose up -d
+```
 
-- 检查 `.env` 里的接口地址是否正确
-- 检查 API key 是否有效
-- 检查上游是否兼容 OpenAI SDK 请求格式
-- 用 `docker compose logs -f` 看错误日志
+### 8. 常用运维命令
 
-如果 `3000` 端口被占用，可以改成：
+重启服务：
+
+```bash
+docker compose restart
+```
+
+仅查看最近日志：
+
+```bash
+docker compose logs --tail=200
+```
+
+清理无用镜像：
+
+```bash
+docker image prune -f
+```
+
+### 9. 端口占用处理
+
+如果本机 `3000` 端口已被占用，可以修改 `docker-compose.yml`：
 
 ```yaml
 ports:
@@ -399,19 +248,56 @@ ports:
 http://localhost:8080
 ```
 
-### 8. 生产环境建议
+### 10. 常见问题排查
 
-- 建议放到 Nginx / Caddy 后面
+如果页面能打开，但聊天请求失败：
+
+- 检查 `.env` 中的接口地址是否正确
+- 检查接口密钥是否有效
+- 检查上游服务是否兼容 OpenAI 请求格式
+- 使用 `docker compose logs -f` 查看容器报错
+
+如果容器启动失败：
+
+- 先执行 `docker compose ps`
+- 再执行 `docker compose logs -f`
+- 检查 `.env` 是否存在且内容完整
+
+### 11. 生产环境建议
+
+- 建议放在 Nginx 或 Caddy 反向代理后面
 - 建议启用 HTTPS
-- 私有部署建议加访问控制
-- 妥善保管 `.env`
+- 私有部署建议增加访问控制
+- 妥善保管 `.env` 文件
 
-## 🤝 Contributing
+## 项目结构
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```text
+app/
+  components/      页面组件
+  composables/     组合式逻辑与状态管理
+  pages/           页面路由
+  assets/          全局样式与资源
+server/
+  api/             服务端接口代理
+  utils/           服务端工具函数
+public/            静态资源
+tests/             测试文件
+nuxt.config.ts     Nuxt 配置
+docker-compose.yml Docker Compose 部署配置
+Dockerfile         Docker 镜像构建文件
+```
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 许可证
+
+本项目基于 MIT 许可证发布，详见 `LICENSE` 文件。
+
+## 贡献方式
+
+如果你希望参与贡献，可以按下面流程操作：
+
+1. Fork 本仓库
+2. 新建功能分支
+3. 提交你的修改
+4. 推送到你的分支
+5. 发起合并请求
