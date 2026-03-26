@@ -741,24 +741,27 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   border-radius: 20px 20px 0 0;
   bottom: 0px;
   width: 100%;
-  padding: 0;
+  padding: 0 0 calc(env(safe-area-inset-bottom, 0px) + 2px);
   box-sizing: border-box;
   z-index: 10;
-  box-shadow: 0px -5px 15px 10px var(--bg);
+  box-shadow: 0px -8px 24px 8px color-mix(in srgb, var(--bg) 88%, transparent);
 }
 
 .input-area-wrapper {
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   flex-direction: column;
   background-color: var(--bg-input);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 8px;
+  border-radius: 18px;
+  padding: 10px;
   box-shadow: var(--shadow-default);
   position: relative;
   z-index: 10;
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 76%, transparent), color-mix(in srgb, var(--surface-glass) 92%, transparent));
+  border-color: var(--editorial-outline);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .input-area-wrapper.drag-over {
@@ -769,7 +772,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
 .chat-textarea {
   display: block;
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 12px 10px;
   background: transparent;
   border: none;
   resize: none;
@@ -802,9 +805,9 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
 }
 
 .send-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   background-color: var(--btn-send-bg);
   color: var(--btn-send-text);
   flex-shrink: 0;
@@ -831,27 +834,32 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border-radius: 8px;
+  border-radius: 12px;
 
   color: var(--btn-model-selector-text);
-  border: 1px solid var(--border);
+  border: 1px solid var(--editorial-outline);
   cursor: pointer;
   flex-shrink: 0;
   font-weight: 500;
   font-size: 13px;
   transition: all 0.2s ease;
-  height: 36px;
+  height: 40px;
   margin: 0;
+  background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .feature-button:hover:not(:disabled) {
-  background-color: var(--btn-model-selector-hover-bg);
+  background-color: color-mix(in srgb, var(--surface-strong) 96%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 14%, var(--editorial-outline));
+  transform: translateY(-1px);
 }
 
 .search-toggle-btn.search-enabled {
   background-color: var(--primary);
   color: var(--primary-foreground);
   border-color: var(--primary);
+  box-shadow: 0 18px 34px rgba(184, 74, 45, 0.18);
 }
 
 .search-toggle-btn.search-enabled:hover:not(:disabled) {
@@ -863,9 +871,10 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 8px 0 0;
+  padding: 10px 0 0;
   gap: 6px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 /* No special casing for sidebars needed – the parent layout
@@ -928,11 +937,103 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
 @media (max-width: 768px) {
   .input-section {
     max-width: 100%;
-    padding: 8px 10px 0;
+    padding: 8px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);
   }
   
   .chat-textarea {
     font-size: 16px; /* Prevent zoom on iOS */
+    padding-left: 10px;
+    padding-right: 10px;
+    max-height: 180px;
+  }
+
+  .input-area-wrapper {
+    margin-bottom: 6px;
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  .input-actions {
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .feature-button {
+    min-width: 40px;
+  }
+
+  .right-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .model-selector-mobile-btn {
+    flex: 1;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+
+  .model-name-truncate {
+    max-width: none;
+    flex: 1;
+  }
+
+  .attachment-preview-row {
+    gap: 6px;
+    padding-bottom: 8px;
+  }
+
+  .attachment-preview {
+    max-width: calc(50% - 3px);
+  }
+
+  .attachment-preview.image img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .attachment-name {
+    max-width: 72px;
+  }
+
+  .attachment-error {
+    font-size: 0.82rem;
+    padding: 7px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-section {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .input-area-wrapper {
+    border-radius: 14px;
+  }
+
+  .input-actions {
+    gap: 6px;
+  }
+
+  .feature-button,
+  .attachment-btn,
+  .send-btn {
+    height: 38px;
+  }
+
+  .attachment-preview {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .attachment-preview.image {
+    width: auto;
+  }
+
+  .search-label {
+    display: none;
   }
 }
 
@@ -951,7 +1052,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
 }
 
 .model-selector-mobile-btn {
-  padding: 4px 8px;
+  padding: 0 10px;
   gap: 4px;
 }
 
@@ -960,6 +1061,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 /* --- ATTACHMENTS --- */
@@ -975,7 +1077,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   margin-bottom: 8px;
   background-color: var(--error-bg, rgba(239, 68, 68, 0.1));
   border: 1px solid var(--error-border, rgba(239, 68, 68, 0.3));
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--error-text, #ef4444);
   font-size: 0.875rem;
 }
@@ -1005,7 +1107,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   margin-bottom: 4px;
   border-bottom: 1px solid var(--border);
 }
@@ -1016,10 +1118,10 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   align-items: center;
   gap: 8px;
   padding: 6px 10px;
-  background-color: var(--bg-secondary, var(--bg-input));
+  background-color: color-mix(in srgb, var(--surface-strong) 90%, transparent);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  max-width: 200px;
+  border-radius: 12px;
+  max-width: 220px;
 }
 
 .attachment-preview.image {
@@ -1065,7 +1167,7 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
   justify-content: center;
   width: 20px;
   height: 20px;
-  background-color: var(--bg);
+  background-color: var(--surface-strong);
   border: 1px solid var(--border);
   border-radius: 50%;
   cursor: pointer;
@@ -1080,8 +1182,8 @@ defineExpose({ setMessage, toggleReasoning, setReasoningEffort, $el: messageForm
 }
 
 .attachment-btn {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   padding: 0;
 }
 

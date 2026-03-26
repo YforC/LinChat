@@ -128,13 +128,16 @@ async function handleDeleteConversation(id) {
   width: 280px;
   max-width: 90vw;
   z-index: 1001;
-  background: var(--bg-sidebar);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 90%, transparent), color-mix(in srgb, var(--surface-glass) 88%, transparent));
   color: var(--text-primary);
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--editorial-outline);
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(.4, 1, .6, 1);
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--editorial-shadow);
 }
 
 .sidebar.active {
@@ -147,20 +150,22 @@ async function handleDeleteConversation(id) {
   justify-content: space-between;
   height: 60px;
   color: var(--text-primary);
-  padding: 0 8px;
+  padding: 0 12px;
   position: relative;
   flex-shrink: 0;
+  border-bottom: 1px solid var(--editorial-outline);
 }
 
 .sidebar-title {
-  font-family: "Inter", sans-serif;
-  font-size: 1.1em;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
   font-weight: 600;
   color: inherit;
+  letter-spacing: 0.01em;
 }
 
 #new-chat-button {
-  margin: 16px 16px 12px 16px;
+  margin: 18px 16px 14px 16px;
   width: calc(100% - 32px);
   display: flex;
   align-items: center;
@@ -169,8 +174,8 @@ async function handleDeleteConversation(id) {
   background: var(--primary);
   color: var(--primary-foreground);
   border: none;
-  border-radius: 8px;
-  height: 36px;
+  border-radius: 14px;
+  height: 44px;
   padding: 0;
   font-size: 1em;
   font-weight: 600;
@@ -179,25 +184,26 @@ async function handleDeleteConversation(id) {
     box-shadow 0.18s,
     transform 0.15s;
   flex-shrink: 0;
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 #new-chat-button:hover {
   background: var(--primary-600);
-  transform: scale(1.03);
+  transform: translateY(-1px);
 }
 
 .main-content {
   flex: 1 1 0;
   overflow-y: auto;
-  padding: 0 16px;
-  margin-bottom: 12px;
+  padding: 0 14px 14px;
+  margin-bottom: 8px;
 }
 
 .conversation-list {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  gap: 4px;
+  gap: 8px;
 }
 
 .conversation-wrapper {
@@ -205,6 +211,10 @@ async function handleDeleteConversation(id) {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
+  padding: 3px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--surface-strong) 58%, transparent);
+  border: 1px solid transparent;
 }
 
 .conversation-button {
@@ -213,8 +223,8 @@ async function handleDeleteConversation(id) {
   background: none;
   color: var(--text-primary);
   border: none;
-  border-radius: 6px;
-  padding: 8px 10px;
+  border-radius: 12px;
+  padding: 10px 12px;
   font-size: 0.95em;
   font-family: inherit;
   font-weight: 500;
@@ -229,12 +239,12 @@ async function handleDeleteConversation(id) {
 }
 
 .conversation-button:hover {
-  background: var(--btn-hover-2);
+  background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
   color: var(--primary);
 }
 
 .conversation-button.active {
-  background: var(--btn-hover-2);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface-strong));
   color: var(--primary);
   font-weight: 700;
 }
@@ -244,11 +254,12 @@ async function handleDeleteConversation(id) {
 }
 
 .delete-button.no-hover {
-  background: none;
+  background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
   border: none;
   padding: 4px;
-  opacity: 0.6;
+  opacity: 0.82;
   flex-shrink: 0;
+  border-radius: 10px;
 }
 
 .delete-button.no-hover:hover {
@@ -264,7 +275,7 @@ async function handleDeleteConversation(id) {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(28, 17, 12, 0.36);
   opacity: 0;
   z-index: 1000;
   transition: opacity 0.3s cubic-bezier(.4, 1, .6, 1);
@@ -280,9 +291,9 @@ async function handleDeleteConversation(id) {
 }
 
 .settings-button {
-  border-radius: 8px;
-  height: 36px;
-  width: 36px;
+  border-radius: 12px;
+  height: 40px;
+  width: 40px;
   transition: background 0.18s;
   flex-shrink: 0;
   padding: 0;
@@ -299,9 +310,9 @@ async function handleDeleteConversation(id) {
 }
 
 .close-button {
-  border-radius: 8px;
-  height: 36px;
-  width: 36px;
+  border-radius: 12px;
+  height: 40px;
+  width: 40px;
   background: none;
   border: none;
   cursor: pointer;
@@ -333,7 +344,7 @@ async function handleDeleteConversation(id) {
     position: fixed;
     width: 80vw;
     max-width: 340px;
-    box-shadow: 4px 0 24px #0002;
+    box-shadow: var(--editorial-shadow);
   }
 
   .dark .sidebar {
@@ -342,6 +353,10 @@ async function handleDeleteConversation(id) {
 }
 
 @media (max-width: 600px) {
+  .sidebar-title {
+    font-size: 1.15rem;
+  }
+
   .conversation-button {
     font-size: 0.9em;
   }

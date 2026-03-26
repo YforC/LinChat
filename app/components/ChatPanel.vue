@@ -491,6 +491,7 @@ function getPartGroups(parts) {
     const isActionPart = (part.type === 'reasoning' || part.type === 'tool_group');
     const isContentPart = (part.type === 'content');
     const isImagePart = (part.type === 'image');
+    const isVideoPart = (part.type === 'video');
 
     // If this is an action part (reasoning/tool_group) and we're either starting or continuing an action group
     if (isActionPart) {
@@ -531,6 +532,17 @@ function getPartGroups(parts) {
         currentGroupType = 'image';
       } else {
         // Add to current image group
+        currentGroup.push(part);
+      }
+    }
+    else if (isVideoPart) {
+      if (currentGroupType !== 'video') {
+        if (currentGroup.length > 0) {
+          groups.push({ type: currentGroupType, parts: currentGroup });
+        }
+        currentGroup = [part];
+        currentGroupType = 'video';
+      } else {
         currentGroup.push(part);
       }
     }
@@ -657,6 +669,31 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
                           </template>
                         </div>
                       </div>
+
+                      <div
+                        v-else-if="group.type === 'video'"
+                        class="part-video"
+                      >
+                        <div class="video-grid">
+                          <template v-for="(part, partIndex) in group.parts" :key="`video-part-${partIndex}`">
+                            <div
+                              v-for="(video, videoIndex) in part.videos"
+                              :key="`video-${partIndex}-${videoIndex}`"
+                              class="video-container"
+                            >
+                              <video
+                                :src="video.url"
+                                controls
+                                playsinline
+                                preload="metadata"
+                              ></video>
+                              <a :href="video.url" target="_blank" rel="noopener noreferrer" class="video-link">
+                                打开视频
+                              </a>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
                     </template>
                   </div>
 
@@ -764,11 +801,10 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 12px;
+  padding: 16px 16px 112px;
   box-sizing: border-box;
   position: relative;
   transition: all 0.3s cubic-bezier(.4, 1, .6, 1);
-  padding-bottom: 100px;
 }
 
 .welcome-container {
@@ -778,13 +814,17 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  padding: 40px 24px 12px;
 }
 
 .welcome-message {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-weight: 600;
   color: var(--text-primary-light);
   margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
 }
 
 .dark .welcome-message {
@@ -792,10 +832,12 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
 }
 
 .incognito-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
   color: var(--text-primary-light);
   margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
 }
 
 .dark .incognito-title {
@@ -803,10 +845,13 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
 }
 
 .incognito-description {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-secondary-light);
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.8;
+  max-width: 44rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .dark .incognito-description {
@@ -817,7 +862,7 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   display: block;
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto 18px;
   position: relative;
   transition: all 0.3s cubic-bezier(.4, 1, .6, 1);
 }
@@ -838,7 +883,7 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
 
 .message.user .message-content {
   align-items: flex-end;
-  max-width: 85%;
+  max-width: min(85%, 560px);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -860,11 +905,12 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   white-space: pre-wrap;
   border-bottom-right-radius: 4px;
   margin-left: auto;
-  max-width: calc(800px * 0.85);
+  max-width: min(100%, 560px);
   width: fit-content;
   transition: all 0.3s cubic-bezier(.4, 1, .6, 1);
   text-align: left;
   /* Ensure text alignment within the bubble */
+  box-shadow: 0 18px 34px rgba(184, 74, 45, 0.18);
 }
 
 .message.assistant .bubble {
@@ -926,6 +972,8 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
 .message-content-footer {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 8px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -979,7 +1027,7 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-secondary-light);
-  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--surface-strong) 88%, transparent), color-mix(in srgb, var(--surface-glass) 92%, transparent));
   padding: 6px 12px;
   border-radius: 20px;
   margin-bottom: 12px;
@@ -989,8 +1037,8 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE/Edge */
   order: -2; /* Ensure it appears above reasoning details which has order: -1 */
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--border);
+  box-shadow: var(--editorial-shadow-soft);
+  border: 1px solid var(--editorial-outline);
   width: fit-content;
 }
 
@@ -1014,9 +1062,11 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE/Edge */
   order: -3; /* Ensure it appears above other elements like reasoning details */
-  border: 1px solid var(--border);
+  border: 1px solid var(--editorial-outline);
   width: fit-content;
   align-self: flex-start;
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .loading-animation {
@@ -1106,11 +1156,13 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
 
 /* Part Group Container Styling - for grouping adjacent reasoning and tool_group parts */
 .part-group-container {
-  border: 2px solid var(--border); /* Thick border for the container */
-  border-radius: 12px; /* Keep border radius for the container */
+  border: 1px solid var(--editorial-outline); /* Thick border for the container */
+  border-radius: 18px; /* Keep border radius for the container */
   overflow: hidden; /* Contain the individual parts within the container */
   margin: 12px 0 0; /* Add some spacing between groups */
   position: relative;
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 /* Each inside-group needs position:relative for its ::after to position correctly */
@@ -1163,40 +1215,208 @@ defineExpose({ scrollToEnd, isAtBottom, chatWrapper });
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 4px;
 }
 
 /* Image part styles */
 .part-image {
-  margin: 12px 0;
+  margin: 14px 0;
+  display: flex;
+  justify-content: center;
 }
 
 .image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
   margin-top: 8px;
 }
 
 .image-container {
   position: relative;
   overflow: hidden;
+  width: min(100%, 360px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+  border: 1px solid var(--editorial-outline);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .image-container img {
+  width: 100%;
   height: auto;
   display: block;
-  max-height: 300px;
+  max-height: min(56vh, 420px);
   object-fit: contain;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
 }
 
 .image-caption {
+  width: 100%;
   padding: 8px;
   font-size: 0.85rem;
   color: var(--text-secondary);
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--editorial-outline);
   background: var(--bg-tertiary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.part-video {
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.video-grid {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.video-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(100%, 420px);
+}
+
+.video-container video {
+  width: 100%;
+  max-height: 320px;
+  border-radius: 18px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--editorial-outline);
+  box-shadow: var(--editorial-shadow-soft);
+}
+
+.video-link {
+  color: var(--primary);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .chat-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .message.user .message-content {
+    max-width: min(90%, 520px);
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    padding: 12px 10px calc(104px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .welcome-container {
+    margin-top: 8vh;
+  }
+
+  .welcome-message,
+  .incognito-title {
+    font-size: 2.2rem;
+  }
+
+  .message {
+    margin-bottom: 14px;
+  }
+
+  .message.user .message-content {
+    max-width: 92%;
+  }
+
+  .bubble {
+    padding: 11px 14px;
+    border-radius: 16px;
+  }
+
+  .message.user .bubble {
+    max-width: 100%;
+  }
+
+  .message.assistant .bubble {
+    max-width: 100%;
+  }
+
+  .copy-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .message-content-footer {
+    opacity: 0.82;
+    margin-top: 6px;
+  }
+
+  .message-stats-row {
+    font-size: 0.72rem;
+    margin-left: 0;
+  }
+
+  .attachment-thumbnail.image img {
+    max-width: 180px;
+    max-height: 180px;
+  }
+
+  .image-grid,
+  .video-grid {
+    gap: 10px;
+  }
+
+  .image-container,
+  .video-container {
+    width: min(100%, 100%);
+    border-radius: 18px;
+  }
+
+  .image-container img,
+  .video-container video {
+    max-height: min(46vh, 360px);
+  }
+
+  .image-caption {
+    font-size: 0.8rem;
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .welcome-message,
+  .incognito-title {
+    font-size: 1.7rem;
+  }
+
+  .bubble {
+    font-size: 0.95rem;
+  }
+
+  .search-view-stats,
+  .memory-adjustment-notification {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+  .attachment-thumbnail.image img {
+    max-width: 148px;
+    max-height: 148px;
+  }
 }
 </style>

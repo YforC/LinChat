@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import localforage from 'localforage';
+import { normalizeModelCatalog } from '~/utils/modelCapabilities';
 
 
 export let DEFAULT_MODEL_ID = "";
@@ -42,7 +43,7 @@ availableModels.value = [];
  */
 function updateModelsFromData(data) {
   if (data && Array.isArray(data) && data.length > 0) {
-    availableModels.value = data;
+    availableModels.value = normalizeModelCatalog(data);
 
     // Set DEFAULT_MODEL_ID to the first available model if it's not already set
     if (!DEFAULT_MODEL_ID) {

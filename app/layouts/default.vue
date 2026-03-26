@@ -223,9 +223,20 @@ whenever( () => mod.value && keys.alt.value && keys.i.value, () => { toggleIncog
   max-width: 100vw;
   box-sizing: border-box;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--bg-gradient);
   position: relative;
   transition: all 0.3s cubic-bezier(.4, 1, .6, 1);
+}
+
+.app-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 18%),
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.12), transparent 28%);
+  opacity: 0.75;
 }
 
 /*
@@ -239,11 +250,25 @@ whenever( () => mod.value && keys.alt.value && keys.i.value, () => { toggleIncog
   min-width: 0;
   height: 100dvh;
   position: relative;
-  background: inherit;
+  background: transparent;
   width: 100%;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(.4, 1, .6, 1);
   z-index: 10;
+  isolation: isolate;
+}
+
+.main-container::before {
+  content: '';
+  position: absolute;
+  inset: 14px 14px 10px 14px;
+  border-radius: 28px;
+  background: var(--surface-glass);
+  border: 1px solid var(--editorial-outline);
+  box-shadow: var(--editorial-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: -1;
 }
 
 /* Sidebar open shifts main content right by sidebar width (280px) */
@@ -294,6 +319,12 @@ whenever( () => mod.value && keys.alt.value && keys.i.value, () => { toggleIncog
     /* Remove padding that was causing scrollbar */
   }
 
+  .main-container::before {
+    inset: 8px 8px 6px;
+    border-radius: 22px;
+    box-shadow: var(--editorial-shadow-soft);
+  }
+
   header {
     padding-top: 0px;
   }
@@ -327,6 +358,16 @@ whenever( () => mod.value && keys.alt.value && keys.i.value, () => { toggleIncog
   .parameter-config-open .main-container {
     transform: none;
     margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-container::before {
+    inset: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
   }
 }
 

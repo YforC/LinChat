@@ -1,5 +1,6 @@
 import localforage from "localforage";
 import { emitter } from "~/composables/emitter";
+import { createChatCompletionPayload } from "~/utils/chatCompletion";
 
 function deriveTitleFromMessages(plainMessages) {
   const firstUserMessage = plainMessages.find(
@@ -92,7 +93,8 @@ async function generateTitleInBackground(conversationId, plainMessages, lastUpda
     const response = await fetch("/api/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: JSON.stringify(createChatCompletionPayload({
+        model: DEFAULT_MODEL_ID,
         messages: [
           { role: "system", content: systemPrompt },
           ...plainMessages.map((msg) => ({
@@ -100,9 +102,8 @@ async function generateTitleInBackground(conversationId, plainMessages, lastUpda
             content: msg.content,
           })),
         ],
-        model: DEFAULT_MODEL_ID,
         stream: false,
-      }),
+      })),
     });
 
     let newTitle = "Untitled"; // Default to Untitled if API call fails

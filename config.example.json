@@ -1,17 +1,71 @@
 [
-    {
-        "category": "Example Category",
-        "logo": "/ai_logos/moonshot.svg",
-        "models": [
-            {
-                "id": "example-model-id",
-                "name": "Example Model Name",
-                "description": "This is a description for the example model.",
-                "reasoning": false,
-                "vision": true,
-                "extra_functions": [],
-                "extra_parameters": {}
-            }
-        ]
-    }
+  {
+    "category": "Gemini Models",
+    "logo": "/ai_logos/openai.svg",
+    "models": [
+      {
+        "id": "gemini-2.5-pro",
+        "name": "Gemini 2.5 Pro",
+        "description": "High-capability Gemini model for general chat and file understanding.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-2.5-flash",
+        "name": "Gemini 2.5 Flash",
+        "description": "Fast Gemini model for low-latency chat and multimodal input.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-3-flash-preview",
+        "name": "Gemini 3 Flash Preview",
+        "description": "Fast preview Gemini model with multimodal support.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-3-pro-preview",
+        "name": "Gemini 3 Pro Preview",
+        "description": "High-end Gemini preview model for multimodal chat.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-3.1-pro-preview",
+        "name": "Gemini 3.1 Pro Preview",
+        "description": "Latest Gemini preview model for advanced multimodal tasks.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-imagen",
+        "name": "Gemini Imagen",
+        "description": "Gemini image generation model using OpenAI-compatible chat completions payloads.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      },
+      {
+        "id": "gemini-veo",
+        "name": "Gemini Veo",
+        "description": "Gemini video generation model using OpenAI-compatible chat completions payloads.",
+        "reasoning": false,
+        "vision": true,
+        "extra_functions": [],
+        "extra_parameters": {}
+      }
+    ]
+  }
 ]

@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import localforage from 'localforage';
+import { getCompatibleImageOutput } from '../utils/attachmentImageFormat.js';
 
 // Maximum file size: 10MB
 const MAX_FILE_SIZE_MB = 10;
@@ -10,9 +11,6 @@ const MAX_ATTACHMENTS = 4;
 
 // Maximum image width (images wider than this will be resized)
 const MAX_IMAGE_WIDTH = 3000;
-
-// WebP quality for compression (0.0 - 1.0)
-const WEBP_QUALITY = 0.85;
 
 // Allowed file types
 const ALLOWED_TYPES = {
@@ -25,9 +23,6 @@ const ALLOWED_TYPES = {
 };
 
 const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'pdf'];
-
-// Image extensions that should be processed (converted to WebP and resized)
-const PROCESSABLE_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'];
 
 /**
  * Composable for managing file attachments in the message form
@@ -123,7 +118,7 @@ export function useAttachments(storageKey = 'pending_attachments') {
     }
 
     /**
-     * Processes an image: resizes if too wide and converts to WebP
+     * Processes an image: resizes if too wide and encodes it to an upstream-compatible format
      * @param {File} file - The image file to process
      * @returns {Promise<{ dataUrl: string, mimeType: string, processed: boolean }>}
      */
@@ -161,12 +156,14 @@ export function useAttachments(storageKey = 'pending_attachments') {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
-        // Convert to WebP
-        const dataUrl = canvas.toDataURL('image/webp', WEBP_QUALITY);
+        const output = getCompatibleImageOutput(file);
+        const dataUrl = output.quality === undefined
+            ? canvas.toDataURL(output.mimeType)
+            : canvas.toDataURL(output.mimeType, output.quality);
 
         return {
             dataUrl,
-            mimeType: 'image/webp',
+            mimeType: output.mimeType,
             processed: true
         };
     }
@@ -251,10 +248,13 @@ export function useAttachments(storageKey = 'pending_attachments') {
             // Determine type
             const type = validation.isImage ? 'image' : 'pdf';
 
-            // Update filename extension if converted to WebP
+            // Keep the stored filename aligned with the encoded image type
             let filename = file.name;
-            if (validation.isImage && mimeType === 'image/webp' && extension !== 'webp') {
-                filename = file.name.replace(/\.[^.]+$/, '.webp');
+            if (validation.isImage) {
+                const output = getCompatibleImageOutput(file);
+                if (output.extension !== extension) {
+                    filename = file.name.replace(/\.[^.]+$/, `.${output.extension}`);
+                }
             }
 
             attachments.value.push({

@@ -276,6 +276,8 @@ export function useMessagesManager(chatPanel) {
           contentValue: chunk.content,
           hasImages: !!chunk.images,
           imagesCount: chunk.images?.length || 0,
+          hasVideos: !!chunk.videos,
+          videosCount: chunk.videos?.length || 0,
           hasReasoning: chunk.reasoning !== null && chunk.reasoning !== undefined,
           hasToolCalls: !!chunk.tool_calls && chunk.tool_calls.length > 0,
           chunkKeys: Object.keys(chunk)
@@ -289,12 +291,12 @@ export function useMessagesManager(chatPanel) {
           timing.endReasoning();
         }
 
-        // Process images
-        if (chunk.images && chunk.images.length > 0) {
-          console.log('[messagesManager.js] Images found:', JSON.stringify(chunk.images, null, 2));
-          for (const image of chunk.images) {
-            partsBuilder.processImage(image);
-          }
+        // Process media
+        if ((chunk.images && chunk.images.length > 0) || (chunk.videos && chunk.videos.length > 0)) {
+          partsBuilder.appendMedia({
+            images: chunk.images || [],
+            videos: chunk.videos || [],
+          });
         }
 
         // Process reasoning
@@ -376,7 +378,7 @@ export function useMessagesManager(chatPanel) {
       }
 
       // If there are images but no content part, add content part at the beginning
-      if (partsBuilder.hasImagePart() && !partsBuilder.hasContentPart() && assistantMsg.content) {
+      if ((partsBuilder.hasImagePart() || partsBuilder.hasVideoPart()) && !partsBuilder.hasContentPart() && assistantMsg.content) {
         partsBuilder.ensureContentPartFirst(assistantMsg.content);
         assistantMsg.parts = partsBuilder.toArray();
       }

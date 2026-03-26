@@ -1,0 +1,4 @@
+step,status
+"检查 compose、git 状态与远程仓库配置",DONE
+"更新 docker-compose 到最终镜像标签并复核",DONE
+"提交并推送到 GitHub",IN_PROGRESS

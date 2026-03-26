@@ -264,20 +264,23 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: none;
-  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  border: 1px solid var(--editorial-outline);
   cursor: pointer;
   padding: 0;
   margin: 0;
-  transition: background 0.18s;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
   color: var(--text-primary);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .new-chat-btn:hover {
-  background: var(--btn-hover);
+  background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 14%, var(--editorial-outline));
+  transform: translateY(-1px);
 }
 
 .model-selector-btn :deep(svg) {
@@ -323,9 +326,9 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
 
 /* Mobile selector button styling */
 .mobile-selector {
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  border: 1px solid var(--editorial-outline);
+  border-radius: 12px;
   padding: 8px 12px;
   display: flex;
   align-items: center;
@@ -337,23 +340,25 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
 }
 
 .mobile-selector:hover {
-  background: var(--btn-hover);
+  background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
 }
 
 .top-bar {
   position: sticky;
   top: 0;
-  height: 60px;
-  background-color: var(--bg);
+  height: 68px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 78%, transparent), color-mix(in srgb, var(--surface-glass) 88%, transparent));
   width: 100%;
   z-index: 100;
   flex-shrink: 0;
   border-bottom: 1px solid transparent;
-  transition: border-bottom 0.2s ease;
+  transition: border-bottom 0.2s ease, background 0.2s ease;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .top-bar.with-border {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--editorial-outline);
 }
 
 .top-bar-content {
@@ -361,7 +366,7 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
   justify-content: flex-start;
   align-items: center;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 18px;
   gap: 12px;
 }
 
@@ -369,12 +374,16 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-strong) 85%, transparent);
+  border: 1px solid var(--editorial-outline);
 }
 
 .incognito-text {
@@ -392,21 +401,24 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  /* Make it spherical */
-  background: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  border: 1px solid var(--editorial-outline);
 
   cursor: pointer;
   padding: 0;
   margin: 0;
-  transition: background 0.18s;
+  transition: background 0.18s, border-color 0.18s, transform 0.18s;
   color: var(--text-primary);
+  box-shadow: var(--editorial-shadow-soft);
 }
 
 .action-toggle:hover {
-  background: var(--btn-hover);
+  background: color-mix(in srgb, var(--surface-strong) 92%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 14%, var(--editorial-outline));
+  transform: translateY(-1px);
 }
 
 /* Add active state styling for when toggles are enabled */
@@ -416,5 +428,33 @@ watch(() => [props.sidebarOpen, props.isIncognito], () => {
   /* Use primary color when enabled */
   color: var(--primary-foreground);
   /* Ensure icon is visible on primary color */
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    height: 62px;
+  }
+
+  .top-bar-content {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .incognito-indicator {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .action-toggle,
+  .new-chat-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 600px) {
+  .incognito-indicator {
+    display: none;
+  }
 }
 </style>

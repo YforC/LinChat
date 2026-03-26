@@ -144,7 +144,7 @@ useHead({
   position: relative;
   justify-content: center;
   overflow-y: scroll;
-  padding: 0 16px
+  padding: 0 16px;
 }
 
 /* Centered content column, no own scroll */
@@ -152,9 +152,25 @@ useHead({
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-width: 700px;
+  max-width: 760px;
   width: 100%;
   margin: 0 auto;
   overflow: visible;    /* or just omit overflow entirely */
+}
+
+@media (max-width: 768px) {
+  .chat-section {
+    padding: 0 6px;
+  }
+
+  .chat-column {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-section {
+    padding: 0;
+  }
 }
 </style>

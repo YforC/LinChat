@@ -2,7 +2,7 @@
  * PartsBuilder - Manages the structured parts array for assistant messages
  * 
  * Encapsulates all parts management logic:
- * - Creating and grouping parts (reasoning, content, tool_groups, images)
+ * - Creating and grouping parts (reasoning, content, tool_groups, images, videos)
  * - Ensuring consecutive same-type parts are grouped correctly
  * - Providing a clean API for adding/updating content
  * 
@@ -11,6 +11,7 @@
  * - 'reasoning': Thinking/reasoning { type: 'reasoning', content: string }
  * - 'tool_group': Group of tools { type: 'tool_group', toolType: string, tools: array }
  * - 'image': Generated images { type: 'image', images: array }
+ * - 'video': Generated videos { type: 'video', videos: array }
  */
 export class PartsBuilder {
     constructor() {
@@ -27,7 +28,7 @@ export class PartsBuilder {
 
     /**
      * Get or create a part of the specified type
-     * @param {string} type - Part type: 'content', 'reasoning', 'tool_group', 'image'
+     * @param {string} type - Part type: 'content', 'reasoning', 'tool_group', 'image', 'video'
      * @param {string|null} toolType - For tool_groups, the type of tools in this group
      * @returns {Object} The existing or newly created part
      */
@@ -50,6 +51,15 @@ export class PartsBuilder {
                 return lastPart;
             }
             const newPart = { type: 'image', images: [] };
+            this.parts.push(newPart);
+            return newPart;
+        }
+
+        if (type === 'video') {
+            if (lastPart?.type === 'video') {
+                return lastPart;
+            }
+            const newPart = { type: 'video', videos: [] };
             this.parts.push(newPart);
             return newPart;
         }
@@ -126,6 +136,36 @@ export class PartsBuilder {
             return this.addImage(url, revisedPrompt);
         }
         return null;
+    }
+
+    addVideo(url, mimeType = null) {
+        if (!url) return null;
+        const part = this.getOrCreatePart('video');
+        part.videos.push({
+            url,
+            mime_type: mimeType
+        });
+        return part;
+    }
+
+    processVideo(video) {
+        const url = video.video_url?.url || video.url;
+        const mimeType = video.mime_type || video.mimeType || null;
+
+        if (url) {
+            return this.addVideo(url, mimeType);
+        }
+        return null;
+    }
+
+    appendMedia({ images = [], videos = [] }) {
+        for (const image of images) {
+            this.processImage(image);
+        }
+
+        for (const video of videos) {
+            this.processVideo(video);
+        }
     }
 
     /**
@@ -222,6 +262,10 @@ export class PartsBuilder {
         return this.parts.some(p => p.type === 'image');
     }
 
+    hasVideoPart() {
+        return this.parts.some(p => p.type === 'video');
+    }
+
     /**
      * Add a content part at the beginning if needed (for image-only responses)
      * @param {string} content - Content to add
@@ -252,6 +296,9 @@ export class PartsBuilder {
             }
             if (part.type === 'image') {
                 return { ...part, images: [...part.images] };
+            }
+            if (part.type === 'video') {
+                return { ...part, videos: [...part.videos] };
             }
             return { ...part };
         });
